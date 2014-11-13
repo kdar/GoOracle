@@ -207,11 +207,15 @@ def get_setting(key, default=None):
     default setting. If neither are set the 'default' value passed in is returned.
     """
 
-    val = sublime.load_settings("User.sublime-settings").get(key)
+    project_plugin_settings = sublime.active_window().active_view().settings().get('GoOracle.sublime-settings', {})
+    val = project_plugin_settings.get(key)
+    if not val:
+        val = sublime.load_settings("User.sublime-settings").get(key)
     if not val:
         val = sublime.load_settings("Default.sublime-settings").get(key)
     if not val:
-        val = default
+        val = default    
+
     return val
 
 def get_output_view(window):
